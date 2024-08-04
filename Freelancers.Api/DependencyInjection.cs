@@ -61,6 +61,15 @@ public static class DependencyInjection
 	}
 
 
+	private static IServiceCollection AddFreelancersServices(this IServiceCollection services)
+	{
+		services.AddScoped<IAuthService, AuthService>();
+		services.AddScoped<IProjectService, ProjectService>();
+
+		return services;
+	}
+
+
 	private static IServiceCollection AddAuthConfig(this IServiceCollection services, IConfiguration configuration)
 	{
 		services.AddIdentity<ApplicationUser, IdentityRole>()
