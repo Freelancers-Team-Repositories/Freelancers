@@ -41,12 +41,12 @@ public class AuthController(UserManager<ApplicationUser> userManager, IAuthServi
 	[HttpPost("Login")]
 	public async Task<IActionResult> Login(LoginRequest request, CancellationToken cancellationToken)
 	{
-		var response = await _authService.GetTokenAsync(request.Email!, request.Password, cancellationToken);
+		var result = await _authService.GetTokenAsync(request.Email!, request.Password, cancellationToken);
 
-		if (response.Error.Description.Equals(UserErrors.EmailNotConfirmed.Description))
+		if (result.Error.Description.Equals(UserErrors.EmailNotConfirmed.Description))
 			await SendEmailConfirmation(request.Email);
 
-		return response.IsSuccess ? Ok(response.Value) : BadRequest(response.Error);
+		return result.IsSuccess ? Ok(result.Value) : result.ToProblem(StatusCodes.Status400BadRequest);
 	}
 
 
