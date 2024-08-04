@@ -1,1 +1,2 @@
-﻿global using Microsoft.AspNetCore.Mvc;
+﻿global using Freelancers.Api.Abstraction;
+global using Microsoft.AspNetCore.Mvc;
