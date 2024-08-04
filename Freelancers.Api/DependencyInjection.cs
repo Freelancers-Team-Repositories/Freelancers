@@ -65,7 +65,7 @@ public static class DependencyInjection
 	{
 		services.AddScoped<IAuthService, AuthService>();
 		services.AddScoped<IProjectService, ProjectService>();
-
+		services.AddTransient<IEmailSender, EmailSender>();
 		return services;
 	}
 
@@ -133,16 +133,6 @@ public static class DependencyInjection
 	private static IServiceCollection AddDefaultCorsConfig(this IServiceCollection services)
 	{
 		services.AddCors(c => c.AddDefaultPolicy(p => p.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
-
-		return services;
-	}
-
-	private static IServiceCollection AddFreelancersServices(this IServiceCollection services)
-	{
-		services.AddScoped<IAuthService, AuthService>();
-
-		services.AddTransient<IEmailSender, EmailSender>();
-
 
 		return services;
 	}
