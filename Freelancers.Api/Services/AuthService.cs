@@ -1,8 +1,6 @@
 ﻿using Freelancers.Api.Authentication;
 using Freelancers.Api.Contracts.Authentication;
-using Freelancers.Api.Entities;
-using Freelancers.Api.Errors;
-using Microsoft.AspNetCore.Identity;
+
 
 namespace Freelancers.Api.Services;
 
@@ -30,10 +28,13 @@ public class AuthService(UserManager<ApplicationUser> userManager, IJwtProvider 
 			return Result.Failure<AuthResponse>(UserErrors.EmailNotConfirmed);
 		#endregion
 
+
 		var jwtResult = _jwtProvider.GenerateToken(user);
 
 		var response = new AuthResponse(user.Id, user.Email!, user.FirstName, user.LastName, jwtResult.token, DateTime.UtcNow.AddHours(jwtResult.expiresIn));
 
 		return Result.Success(response);
 	}
+
+
 }

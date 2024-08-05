@@ -1,14 +1,9 @@
-﻿using FluentValidation;
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
 using Freelancers.Api.Authentication;
-using Freelancers.Api.Entities;
 using Freelancers.Api.Persistence;
-using Freelancers.Api.Services;
 using Freelancers.Api.Settings;
-using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -34,9 +29,8 @@ public static class DependencyInjection
 			.AddFluentValidationConfig()
 			.AddDefaultCorsConfig()
 			.AddFreelancersServices()
-			.AddFreelancersOptions(configuration);
-
-
+			.AddFreelancersOptions(configuration)
+			.AddExceptionHandlerConfig();
 
 
 		return services;
@@ -144,7 +138,13 @@ public static class DependencyInjection
 		return services;
 	}
 
+	private static IServiceCollection AddExceptionHandlerConfig(this IServiceCollection services)
+	{
+		services.AddExceptionHandler<GlobalExceptionHandler>();
+		services.AddProblemDetails();
 
+		return services;
+	}
 
 
 }

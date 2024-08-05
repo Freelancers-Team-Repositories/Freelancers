@@ -1,10 +1,5 @@
 ﻿using Freelancers.Api.Contracts.Authentication;
 using Freelancers.Api.Contracts.Const;
-using Freelancers.Api.Entities;
-using Freelancers.Api.Errors;
-using Freelancers.Api.Services;
-using Mapster;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
@@ -25,6 +20,12 @@ public class AuthController(UserManager<ApplicationUser> userManager, IAuthServi
 	[HttpPost("SignUp")]
 	public async Task<IActionResult> SignUp(SignUpRequest request, CancellationToken cancellationToken)
 	{
+
+		var isExistingEmail = _userManager.FindByEmailAsync(request.Email);
+		if (isExistingEmail is not null)
+			return Result.Failure(UserErrors.DuplicatedUserEmail).ToProblem(StatusCodes.Status409Conflict);
+
+
 		var user = request.Adapt<ApplicationUser>();
 
 		var result = await _userManager.CreateAsync(user, request.Password);

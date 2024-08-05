@@ -39,6 +39,7 @@ await DefaultRoles.SeedAsync(roleManager);
 await DefaultUsers.SeedFreelancerAsync(userManager);
 #endregion
 
+app.UseExceptionHandler();
 
 app.MapControllers();
 
