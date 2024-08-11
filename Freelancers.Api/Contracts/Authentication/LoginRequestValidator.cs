@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace Freelancers.Api.Contracts.Authentication;
+﻿namespace Freelancers.Api.Contracts.Authentication;
 
 public class LoginRequestValidator : AbstractValidator<LoginRequest>
 {

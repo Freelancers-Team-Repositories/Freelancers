@@ -1,10 +1,4 @@
-﻿using Freelancers.Api.Contracts.Authentication;
-using Freelancers.Api.Contracts.Const;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.WebUtilities;
-using System.Text;
-using System.Text.Encodings.Web;
-
+﻿
 namespace Freelancers.Api.Controllers;
 
 
@@ -20,77 +14,36 @@ public class AuthController(UserManager<ApplicationUser> userManager, IAuthServi
 	[HttpPost("SignUp")]
 	public async Task<IActionResult> SignUp(SignUpRequest request, CancellationToken cancellationToken)
 	{
+		var result = await _authService.RegisterAsync(request, cancellationToken);
 
-		var isExistingEmail = _userManager.FindByEmailAsync(request.Email);
-		if (isExistingEmail is not null)
-			return Result.Failure(UserErrors.DuplicatedUserEmail).ToProblem(StatusCodes.Status409Conflict);
-
-
-		var user = request.Adapt<ApplicationUser>();
-
-		var result = await _userManager.CreateAsync(user, request.Password);
-		if (!result.Succeeded)
-			return BadRequest(result.Errors.Select(x => x.Description));
-
-		await _userManager.AddToRoleAsync(user, AppRoles.Customer);
-		await SendEmailConfirmation(user.Email!);
-
-		return Ok("Please check your email to confirm account");
+		return result.IsSuccess ? Ok() : result.ToProblem();
 	}
 
 
 	[HttpPost("Login")]
 	public async Task<IActionResult> Login(LoginRequest request, CancellationToken cancellationToken)
 	{
-		var result = await _authService.GetTokenAsync(request.Email!, request.Password, cancellationToken);
+		var authResult = await _authService.GetTokenAsync(request.Email, request.Password, cancellationToken);
 
-		if (result.Error.Description.Equals(UserErrors.EmailNotConfirmed.Description))
-			await SendEmailConfirmation(request.Email);
-
-		return result.IsSuccess ? Ok(result.Value) : result.ToProblem(StatusCodes.Status400BadRequest);
+		return authResult.IsSuccess ? Ok(authResult.Value) : authResult.ToProblem();
 	}
 
 
-	[HttpGet("ConfirmEmail")]
-	public async Task<IActionResult> ConfirmEmail(string userId, string code)
+	[HttpPost("confirm-email")]
+	public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailRequest request, CancellationToken cancellationToken)
 	{
-		if (userId is null || code is null)
-			return BadRequest("Invalid Data");
+		var result = await _authService.ConfirmEmailAsync(request);
 
-		var user = await _userManager.FindByIdAsync(userId);
-		if (user is null)
-			return NotFound();
-
-		code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-		var result = await _userManager.ConfirmEmailAsync(user, code);
-
-
-		return result.Succeeded ? Ok("Email confirmed successfully") : BadRequest();
+		return result.IsSuccess ? Ok() : result.ToProblem();
 	}
 
 
-
-	private async Task<bool> SendEmailConfirmation(string email)
+	[HttpPost("resend-confirmation-email")]
+	public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailRequest request, CancellationToken cancellationToken)
 	{
-		var user = await _userManager.FindByEmailAsync(email);
-		if (user is null)
-			return false;
+		var result = await _authService.ResendConfirmationEmailAsync(request);
 
-		var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-		code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
-		var callbackUrl = Url.Action(
-			action: "ConfirmEmail",
-			controller: "Auth",
-			values: new { userId = user.Id, code },
-			protocol: Request.Scheme
-
-		);
-
-		var body = @$"<div>Click <a href='{HtmlEncoder.Default.Encode(callbackUrl!).ToString()}'> here </a> to confirm your account</div>";
-
-		await _emailSender.SendEmailAsync(user.Email!, "Confirm your email", body);
-
-		return true;
+		return result.IsSuccess ? Ok() : result.ToProblem();
 	}
+
 }

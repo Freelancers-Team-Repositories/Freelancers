@@ -1,7 +1,5 @@
 using Freelancers.Api;
-using Freelancers.Api.Entities;
 using Freelancers.Api.Seeds;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 

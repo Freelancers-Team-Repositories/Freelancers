@@ -1,8 +1,8 @@
 ﻿using Freelancers.Api.Settings;
-using Microsoft.AspNetCore.Identity.UI.Services;
+using MailKit.Net.Smtp;
+using MailKit.Security;
 using Microsoft.Extensions.Options;
-using System.Net;
-using System.Net.Mail;
+using MimeKit;
 
 namespace Freelancers.Api.Services;
 
@@ -13,24 +13,26 @@ public class EmailSender(IOptions<MailSettings> mailSettings) : IEmailSender
 
 	public async Task SendEmailAsync(string email, string subject, string htmlMessage)
 	{
-		MailMessage message = new()
+		var message = new MimeMessage
 		{
-			From = new MailAddress(_mailSettings.Email, _mailSettings.DisplayName),
-			Body = htmlMessage,
-			IsBodyHtml = true,
+			Sender = MailboxAddress.Parse(_mailSettings.Email),
 			Subject = subject,
 		};
+		message.To.Add(MailboxAddress.Parse(email));
 
-		message.To.Add(email);
-
-		SmtpClient smtpClient = new(_mailSettings.Host, _mailSettings.port)
+		var builder = new BodyBuilder
 		{
-			Credentials = new NetworkCredential(_mailSettings.Email, _mailSettings.Password),
-			EnableSsl = true,
+			HtmlBody = htmlMessage,
 		};
 
-		await smtpClient.SendMailAsync(message);
+		message.Body = builder.ToMessageBody();
 
-		smtpClient.Dispose();
+		using var smtp = new SmtpClient();
+
+
+		smtp.Connect(_mailSettings.Host, _mailSettings.port, SecureSocketOptions.StartTls);
+		smtp.Authenticate(_mailSettings.Email, _mailSettings.Password);
+		await smtp.SendAsync(message);
+		smtp.Disconnect(true);
 	}
 }

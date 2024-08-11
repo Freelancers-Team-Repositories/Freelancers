@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-using Freelancers.Api.Contracts.Const;
-using Freelancers.Api.Errors;
+﻿using Freelancers.Api.Contracts.Const;
 
 namespace Freelancers.Api.Contracts.Authentication;
 
@@ -10,10 +8,12 @@ public class SignUpRequestValidator : AbstractValidator<SignUpRequest>
 	{
 
 		RuleFor(x => x.FirstName)
-			.NotEmpty();
+			.NotEmpty()
+			.Length(3, 100);
 
 		RuleFor(x => x.LastName)
-			.NotEmpty();
+			.NotEmpty()
+			.Length(3, 100);
 
 
 		RuleFor(x => x.Email)
@@ -23,12 +23,11 @@ public class SignUpRequestValidator : AbstractValidator<SignUpRequest>
 
 		RuleFor(x => x.Password)
 			.NotEmpty()
-			.MinimumLength(8)
-			.Matches(RegexPatterns.Password).WithMessage(UserErrors.WeakPassword);
+			.Matches(RegexPatterns.Password).WithMessage("Password should be at least 8 digits and should contains Lowercase, NonAlphanumeric and Uppercase");
 
 
 		RuleFor(x => x.ConfirmPassword)
-			.Equal(x => x.Password).WithMessage(UserErrors.ConfirmPasswordNotMatch);
+			.Equal(x => x.Password).WithMessage("Passwords do not match. Please make sure both password fields are identical");
 
 	}
 }
