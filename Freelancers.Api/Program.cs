@@ -1,11 +1,16 @@
 using Freelancers.Api;
 using Freelancers.Api.Seeds;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddDependencies(builder.Configuration);
 
+builder.Host.UseSerilog((context, configuration) =>
+{
+	configuration.ReadFrom.Configuration(context.Configuration);
+});
 
 
 var app = builder.Build();
@@ -21,9 +26,6 @@ app.UseHttpsRedirection();
 
 app.UseCors();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
 
 #region Seed Data
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
@@ -37,7 +39,14 @@ await DefaultRoles.SeedAsync(roleManager);
 await DefaultUsers.SeedFreelancerAsync(userManager);
 #endregion
 
+
 app.UseExceptionHandler();
+
+app.UseSerilogRequestLogging();
+
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

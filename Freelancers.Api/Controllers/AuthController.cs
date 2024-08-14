@@ -30,7 +30,7 @@ public class AuthController(UserManager<ApplicationUser> userManager, IAuthServi
 
 
 	[HttpPost("confirm-email")]
-	public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailRequest request, CancellationToken cancellationToken)
+	public async Task<IActionResult> ConfirmEmail(ConfirmEmailRequest request, CancellationToken cancellationToken)
 	{
 		var result = await _authService.ConfirmEmailAsync(request);
 
@@ -39,7 +39,7 @@ public class AuthController(UserManager<ApplicationUser> userManager, IAuthServi
 
 
 	[HttpPost("resend-confirmation-email")]
-	public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailRequest request, CancellationToken cancellationToken)
+	public async Task<IActionResult> ResendConfirmationEmail(ResendConfirmationEmailRequest request, CancellationToken cancellationToken)
 	{
 		var result = await _authService.ResendConfirmationEmailAsync(request);
 

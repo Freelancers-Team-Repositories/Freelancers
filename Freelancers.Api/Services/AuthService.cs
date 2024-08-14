@@ -21,8 +21,6 @@ public class AuthService(
 	private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
 	private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-
-
 	public async Task<Result<AuthResponse>> GetTokenAsync(string email, string password, CancellationToken cancellationToken = default)
 	{
 		#region check User		
@@ -136,13 +134,13 @@ public class AuthService(
 
 	private async Task SendConfirmationEmail(ApplicationUser user, string code)
 	{
-		var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
+		// var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
 
 		var emailBody = EmailBodyBuilder.GenerateEmailBody("EmailConfirmation.html",
 			templateModel: new Dictionary<string, string>
 			{
 				{"{{name}}" , user.FirstName },
-				{"{{action_url}}" , $"{origin}/auth/emailConfirmation?userId={user.Id}&code={code}" },
+				{"{{action_url}}" , $"{"https://freelancers.runasp.net/"}/auth/confirm-email?userId={user.Id}&code={code}" },
 			}
 		);
 
