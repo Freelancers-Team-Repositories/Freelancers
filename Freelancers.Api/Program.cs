@@ -1,5 +1,7 @@
 using Freelancers.Api;
 using Freelancers.Api.Seeds;
+using Hangfire;
+using HangfireBasicAuthenticationFilter;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +24,7 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 
 app.UseCors();
@@ -37,6 +40,22 @@ var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Applicati
 
 await DefaultRoles.SeedAsync(roleManager);
 await DefaultUsers.SeedFreelancerAsync(userManager);
+#endregion
+
+#region Hangfire configurations
+app.UseHangfireDashboard("/jobs", new DashboardOptions()
+{
+	Authorization =
+	[
+		new HangfireCustomBasicAuthenticationFilter
+		{
+			User  = app.Configuration.GetValue<string>("HangfireSettings:Username"),
+			Pass  = app.Configuration.GetValue<string>("HangfireSettings:Password")
+		}
+	],
+	DashboardTitle = "Freelancers Dashboard",
+
+});
 #endregion
 
 

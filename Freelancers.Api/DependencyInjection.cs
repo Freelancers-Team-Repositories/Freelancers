@@ -2,6 +2,7 @@
 using Freelancers.Api.Authentication;
 using Freelancers.Api.Persistence;
 using Freelancers.Api.Settings;
+using Hangfire;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,8 @@ public static class DependencyInjection
 			.AddExceptionHandlerConfig();
 
 
+		services.AddBackgroundJobsConfig(configuration);
+
 		return services;
 	}
 
@@ -59,6 +62,8 @@ public static class DependencyInjection
 		services.AddScoped<IAuthService, AuthService>();
 		services.AddScoped<IProjectService, ProjectService>();
 		services.AddTransient<IEmailSender, EmailSender>();
+
+
 		return services;
 	}
 
@@ -152,5 +157,19 @@ public static class DependencyInjection
 		return services;
 	}
 
+	private static IServiceCollection AddBackgroundJobsConfig(this IServiceCollection services, IConfiguration configuration)
+	{
+
+		services.AddHangfire(config => config
+			.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+			.UseSimpleAssemblyNameTypeSerializer()
+			.UseRecommendedSerializerSettings()
+			.UseSqlServerStorage(configuration.GetConnectionString("HangfireConnection")));
+
+
+		services.AddHangfireServer();
+
+		return services;
+	}
 
 }

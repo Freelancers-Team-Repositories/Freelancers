@@ -1,5 +1,6 @@
 ﻿using Freelancers.Api.Authentication;
 using Freelancers.Api.Helpers;
+using Hangfire;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
@@ -134,16 +135,18 @@ public class AuthService(
 
 	private async Task SendConfirmationEmail(ApplicationUser user, string code)
 	{
-		// var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
+		var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
 
 		var emailBody = EmailBodyBuilder.GenerateEmailBody("EmailConfirmation.html",
 			templateModel: new Dictionary<string, string>
 			{
 				{"{{name}}" , user.FirstName },
-				{"{{action_url}}" , $"{"https://freelancers.runasp.net/"}/auth/confirm-email?userId={user.Id}&code={code}" },
+				{"{{action_url}}" , $"{origin}/confirmEmail?userId={user.Id}&code={code}" },
 			}
 		);
 
-		await _emailSender.SendEmailAsync(user.Email!, "✅ Survey Basket: Email Confirmation", emailBody);
+		BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(user.Email!, "✅ Survey Basket: Email Confirmation", emailBody));
+
+		await Task.CompletedTask;
 	}
 }
