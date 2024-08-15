@@ -1,7 +1,6 @@
 ﻿namespace Freelancers.Api.Contracts.Users;
 
-public record UserProfileResponse(
-	string Email,
+public record UpdateProfileRequest(
 	string FirstName,
 	string LastName
 );
