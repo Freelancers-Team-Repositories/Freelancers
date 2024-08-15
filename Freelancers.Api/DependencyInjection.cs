@@ -62,7 +62,7 @@ public static class DependencyInjection
 		services.AddScoped<IAuthService, AuthService>();
 		services.AddScoped<IProjectService, ProjectService>();
 		services.AddTransient<IEmailSender, EmailSender>();
-
+		services.AddScoped<IUserService, UserService>();
 
 		return services;
 	}
