@@ -1,8 +1,8 @@
 ﻿using Freelancers.Api.Authentication;
+using Freelancers.Api.Contracts.Const;
 using Freelancers.Api.Helpers;
 using Hangfire;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
 using System.Text;
 
 
@@ -35,8 +35,9 @@ public class AuthService(
 
 		if (result.Succeeded)
 		{
-			var jwtResult = _jwtProvider.GenerateToken(user);
 
+			var userRoles = await _userManager.GetRolesAsync(user);
+			var jwtResult = _jwtProvider.GenerateToken(user, userRoles);
 
 
 			await _userManager.UpdateAsync(user);
@@ -48,6 +49,7 @@ public class AuthService(
 				user.FirstName,
 				user.LastName,
 				jwtResult.token,
+				userRoles,
 				DateTime.UtcNow.AddHours(jwtResult.expiresIn)
 			);
 
@@ -106,7 +108,10 @@ public class AuthService(
 		var result = await _userManager.ConfirmEmailAsync(user, code);
 
 		if (result.Succeeded)
+		{
+			await _userManager.AddToRoleAsync(user, AppRoles.Customer);
 			return Result.Success();
+		}
 
 
 		var error = result.Errors.First();
@@ -217,5 +222,7 @@ public class AuthService(
 
 		await Task.CompletedTask;
 	}
+
+
 
 }
