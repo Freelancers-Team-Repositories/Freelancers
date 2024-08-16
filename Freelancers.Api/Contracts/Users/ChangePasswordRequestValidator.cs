@@ -1,4 +1,4 @@
-﻿using Freelancers.Api.Contracts.Const;
+﻿using Freelancers.Api.Abstraction.Const;
 
 namespace Freelancers.Api.Contracts.Users;
 

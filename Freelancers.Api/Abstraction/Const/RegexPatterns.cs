@@ -1,4 +1,5 @@
-﻿namespace Freelancers.Api.Contracts.Const;
+﻿
+namespace Freelancers.Api.Abstraction.Const;
 
 public static class RegexPatterns
 {

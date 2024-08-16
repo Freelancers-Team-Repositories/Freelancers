@@ -1,5 +1,5 @@
-﻿using Freelancers.Api.Authentication;
-using Freelancers.Api.Contracts.Const;
+﻿using Freelancers.Api.Abstraction.Const;
+using Freelancers.Api.Authentication;
 using Freelancers.Api.Helpers;
 using Hangfire;
 using Microsoft.AspNetCore.WebUtilities;
@@ -109,7 +109,7 @@ public class AuthService(
 
 		if (result.Succeeded)
 		{
-			await _userManager.AddToRoleAsync(user, AppRoles.Customer);
+			await _userManager.AddToRoleAsync(user, DefaultRoles.Customer);
 			return Result.Success();
 		}
 

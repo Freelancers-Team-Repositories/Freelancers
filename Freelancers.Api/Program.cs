@@ -1,5 +1,4 @@
 using Freelancers.Api;
-using Freelancers.Api.Seeds;
 using Hangfire;
 using HangfireBasicAuthenticationFilter;
 using Serilog;
@@ -29,18 +28,6 @@ app.UseHttpsRedirection();
 
 app.UseCors();
 
-
-#region Seed Data
-var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
-
-using var scope = scopeFactory.CreateScope();
-
-var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-
-await DefaultRoles.SeedAsync(roleManager);
-await DefaultUsers.SeedFreelancerAsync(userManager);
-#endregion
 
 #region Hangfire configurations
 app.UseHangfireDashboard("/jobs", new DashboardOptions()

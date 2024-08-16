@@ -5,7 +5,6 @@ using Freelancers.Api.Settings;
 using Hangfire;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
@@ -70,7 +69,7 @@ public static class DependencyInjection
 
 	private static IServiceCollection AddAuthConfig(this IServiceCollection services, IConfiguration configuration)
 	{
-		services.AddIdentity<ApplicationUser, IdentityRole>()
+		services.AddIdentity<ApplicationUser, ApplicationRole>()
 			.AddEntityFrameworkStores<ApplicationDbContext>()
 			.AddDefaultTokenProviders();
 
