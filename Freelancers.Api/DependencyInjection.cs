@@ -1,7 +1,10 @@
 ﻿using FluentValidation.AspNetCore;
-using Freelancers.Api.Authentication;
-using Freelancers.Api.Persistence;
-using Freelancers.Api.Settings;
+using Freelancers.Core.Entities;
+using Freelancers.Core.Interfaces;
+using Freelancers.Repository.Persistence;
+using Freelancers.Service;
+using Freelancers.Service.Settings;
+using Freelancers.Shared.Options;
 using Hangfire;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -59,7 +62,6 @@ public static class DependencyInjection
 	private static IServiceCollection AddFreelancersServices(this IServiceCollection services)
 	{
 		services.AddScoped<IAuthService, AuthService>();
-		services.AddScoped<IProjectService, ProjectService>();
 		services.AddTransient<IEmailSender, EmailSender>();
 		services.AddScoped<IUserService, UserService>();
 

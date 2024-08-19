@@ -1,4 +1,9 @@
 ﻿
+using Freelancers.Api.Extensions;
+using Freelancers.Core.Contracts.Authentication;
+using Freelancers.Core.Entities;
+using Freelancers.Core.Interfaces;
+
 namespace Freelancers.Api.Controllers;
 
 

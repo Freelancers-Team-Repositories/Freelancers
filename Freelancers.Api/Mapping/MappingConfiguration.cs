@@ -1,9 +1,7 @@
-﻿using Freelancers.Api.Contracts.Authentication;
-using Freelancers.Api.Entities;
-using Mapster;
+﻿using Freelancers.Core.Contracts.Authentication;
+using Freelancers.Core.Entities;
 
 namespace Freelancers.Api.Mapping;
-
 public class MappingConfiguration : IRegister
 {
 	public void Register(TypeAdapterConfig config)

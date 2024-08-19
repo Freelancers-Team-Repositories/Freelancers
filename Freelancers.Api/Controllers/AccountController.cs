@@ -1,9 +1,8 @@
-﻿using Freelancers.Api.Contracts.Users;
-using Freelancers.Api.Extensions;
+﻿using Freelancers.Api.Extensions;
+using Freelancers.Core.Contracts.Users;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Freelancers.Api.Controllers;
-
 
 [Route("[controller]")]
 [ApiController]
