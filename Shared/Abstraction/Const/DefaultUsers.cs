@@ -1,5 +1,4 @@
-﻿
-namespace Freelancers.Shared.Abstraction.Const;
+﻿namespace Freelancers.Shared.Abstraction.Const;
 
 public static class DefaultUsers
 {

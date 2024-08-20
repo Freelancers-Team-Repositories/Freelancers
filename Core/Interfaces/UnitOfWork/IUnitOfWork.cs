@@ -1,9 +1,6 @@
-﻿using Freelancers.Core.Entities;
-
-namespace Freelancers.Core.Interfaces.UnitOfWork;
-
+﻿namespace Freelancers.Core.Interfaces.UnitOfWork;
 public interface IUnitOfWork : IDisposable, IAsyncDisposable
 {
-    IGenericRepository<ApplicationUser> Users { get; }
+    public IGenericRepository<T> Repository<T>() where T : class;
     Task<int> CompleteAsync();
 }

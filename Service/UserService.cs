@@ -18,14 +18,7 @@ public class UserService(UserManager<ApplicationUser> userManager, IUnitOfWork u
 
     public async Task<Result<UserProfileResponse>> GetProfileAsync(string userId)
     {
-        /*var user = await _userManager.Users
-            .Where(x => x.Id == userId)
-            .ProjectToType<UserProfileResponse>()
-            .SingleAsync();*/
-
-        var user = await _unitOfWork.Users.GetByIdAsync(userId);
-
-
+        var user = await _unitOfWork.Repository<ApplicationUser>().GetByIdAsync(userId);
 
         return Result.Success(user.Adapt<UserProfileResponse>());
     }
@@ -36,8 +29,8 @@ public class UserService(UserManager<ApplicationUser> userManager, IUnitOfWork u
                     .Where(x => x.Id == userId)
                     .ExecuteUpdateAsync(setters =>
                         setters
-                            .SetProperty(x => x.FirstName, request.FirstName)
-                            .SetProperty(x => x.LastName, request.LastName)
+                        .SetProperty(x => x.FirstName, request.FirstName)
+                        .SetProperty(x => x.LastName, request.LastName)
                     );
 
         return Result.Success();
@@ -51,7 +44,6 @@ public class UserService(UserManager<ApplicationUser> userManager, IUnitOfWork u
 
         if (result.Succeeded)
             return Result.Success();
-
 
         var error = result.Errors.First();
 
