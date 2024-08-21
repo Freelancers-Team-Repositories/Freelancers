@@ -1,10 +1,11 @@
-﻿namespace Freelancers.Core.Entities
+﻿
+namespace Freelancers.Core.Entities;
+public class FreelancerTrack
 {
-    public class FreelancerTrack
-    {
-        public string FreelancerId { get; set; } = null!;
-        public ApplicationUser Freelancer { get; set; } = new();
-        public int TrackId { get; set; }
-        public Track Track { get; set; } = new();
-    }
+    public string FreelancerId { get; set; } = null!;
+    public int TrackId { get; set; }
+
+
+    public ApplicationUser Freelancer { get; set; } = new();
+    public Track Track { get; set; } = new();
 }

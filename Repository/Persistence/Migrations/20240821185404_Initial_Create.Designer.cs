@@ -4,6 +4,7 @@ using Freelancers.Repository.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Freelancers.Repository.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240821185404_Initial_Create")]
+    partial class Initial_Create
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,7 +187,7 @@ namespace Freelancers.Repository.Persistence.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOE6yy/4Tvrvk5taJSOf9+oDlRAkxuZd3zWxcI4smd5fL2vvmZx9oqufhuiMfYH/XQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBHAazFJ115hv7B6mvXhkRTin8MmOjwQqVucf1+TMAcTLerT5Qk1TN8OCv2AeHAdmQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "C13DAE58-0332-4518-BB26-8ECAD93C61C5",
                             TwoFactorEnabled = false,
@@ -568,7 +571,7 @@ namespace Freelancers.Repository.Persistence.Migrations
                         new
                         {
                             UserId = "416282aa-69b8-4f2e-a5d4-6644f2884151",
-                            RoleId = "6CCF2454-C7FE-4F58-89FB-F565AE5643E3"
+                            RoleId = "ce2fd704-7a3c-4a03-846e-c5479a8b921d"
                         });
                 });
 
