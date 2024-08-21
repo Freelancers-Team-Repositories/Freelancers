@@ -20,17 +20,17 @@ public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 
         builder.HasData(new ApplicationUser()
         {
-            Id = DefaultUsers.FreelancerId,
+            Id = DefaultUsers.AdminId,
             FirstName = "Freelancer",
             LastName = "Freelancer",
-            UserName = DefaultUsers.FreelancerEmail,
-            NormalizedUserName = DefaultUsers.FreelancerEmail.ToUpper(),
-            Email = DefaultUsers.FreelancerEmail,
-            NormalizedEmail = DefaultUsers.FreelancerEmail.ToUpper(),
-            SecurityStamp = DefaultUsers.FreelancerSecurityStamp,
-            ConcurrencyStamp = DefaultUsers.FreelancerConcurrencyStamp,
+            UserName = DefaultUsers.AdminEmail,
+            NormalizedUserName = DefaultUsers.AdminEmail.ToUpper(),
+            Email = DefaultUsers.AdminEmail,
+            NormalizedEmail = DefaultUsers.AdminEmail.ToUpper(),
+            SecurityStamp = DefaultUsers.AdminSecurityStamp,
+            ConcurrencyStamp = DefaultUsers.AdminConcurrencyStamp,
             EmailConfirmed = true,
-            PasswordHash = passwordHasher.HashPassword(null!, DefaultUsers.FreelancerPassword)
+            PasswordHash = passwordHasher.HashPassword(null!, DefaultUsers.AdminPassword)
         });
     }
 }

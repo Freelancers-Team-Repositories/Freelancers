@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
-
+using System.Threading;
 
 namespace Freelancers.Service;
 public class AuthService(
@@ -193,7 +193,7 @@ public class AuthService(
 
 
 
-	private async Task SendConfirmationEmail(ApplicationUser user, string code)
+	private async System.Threading.Tasks.Task SendConfirmationEmail(ApplicationUser user, string code)
 	{
 		var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
 
@@ -207,10 +207,10 @@ public class AuthService(
 
 		BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(user.Email!, "✅ Survey Basket: Email Confirmation", emailBody));
 
-		await Task.CompletedTask;
+		await System.Threading.Tasks.Task.CompletedTask;
 	}
 
-	private async Task SendResetPasswordEmail(ApplicationUser user, string code)
+	private async System.Threading.Tasks.Task SendResetPasswordEmail(ApplicationUser user, string code)
 	{
 
 		var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
@@ -228,6 +228,6 @@ public class AuthService(
 			 _emailSender.SendEmailAsync(user.Email!, "✅ Survey Basket: Change Password", emailBody)
 		);
 
-		await Task.CompletedTask;
+		await System.Threading.Tasks.Task.CompletedTask;
 	}
 }

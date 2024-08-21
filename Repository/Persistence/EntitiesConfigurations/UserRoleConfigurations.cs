@@ -10,7 +10,7 @@ public class UserRoleConfigurations : IEntityTypeConfiguration<IdentityUserRole<
     {
         builder.HasData(new IdentityUserRole<string>
         {
-            UserId = DefaultUsers.FreelancerId,
+            UserId = DefaultUsers.AdminId,
             RoleId = DefaultRoles.FreelancerRoleId
         });
     }

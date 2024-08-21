@@ -1,8 +1,16 @@
 namespace Freelancers.Core.Entities;
-public class Project
+public class Project: BaseEntity
 {
-    public string Id { get; set; }
-    public string ProjectName { get; set; }
-    public string Description { get; set; }
-    public string ? Summary { get; set; }
+    public int Id { get; set; }
+    public string Title { get; set; } = null!; 
+    public string Description { get; set; } = null!;
+    public string Summary { get; set; } = null!;
+    public string ImageUrl { get; set; } = null!;
+    public string ProjectUrl { get; set; } = null!;
+    public string? VideoUrl { get; set; }
+    public bool IsAvailabe { get; set; }
+    public bool IsActive { get; set; }
+    public ICollection<SubImage> SubImages { get; set; } = [];
+    public ICollection<ProjectTechnology> ProjectTechnologies { get; set; } = [];
+    public ICollection<FreelancerProject> FreelancerProjects { get; set; } = [];
 }

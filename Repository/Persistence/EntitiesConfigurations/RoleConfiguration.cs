@@ -24,6 +24,20 @@ public class RoleConfiguration : IEntityTypeConfiguration<ApplicationRole>
             NormalizedName = DefaultRoles.Customer.ToUpper(),
             ConcurrencyStamp = DefaultRoles.CustomerRoleConcurrencyStamp,
             IsDefault = true,
+        },
+
+        new ApplicationRole{
+            Id = DefaultRoles.AdminRoleId,
+            Name = DefaultRoles.Admin,
+            NormalizedName = DefaultRoles.Admin.ToUpper(),
+            ConcurrencyStamp = DefaultRoles.AdminRoleConcurrencyStamp,
+        },
+
+        new ApplicationRole{
+            Id = DefaultRoles.TeamLeadRoleId,
+            Name = DefaultRoles.TeamLead,
+            NormalizedName = DefaultRoles.TeamLead.ToUpper(),
+            ConcurrencyStamp = DefaultRoles.TeamLeadRoleConcurrencyStamp,
         }
         ]);
     }
