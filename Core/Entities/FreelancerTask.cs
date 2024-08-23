@@ -1,8 +1,8 @@
 ﻿namespace Freelancers.Core.Entities;
 public class FreelancerTask
 {
-    public DateTime StartAt { get; set; }
-    public DateTime EndAt { get; set; }
+    public DateTime? StartAt { get; set; }
+    public DateTime? EndAt { get; set; }
 
     public string FreelancerId { get; set; } = null!;
     public int TaskId { get; set; }
