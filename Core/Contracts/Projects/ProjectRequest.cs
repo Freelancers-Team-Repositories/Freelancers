@@ -2,7 +2,6 @@
 
 namespace Freelancers.Core.Contracts.Projects;
 public record ProjectRequest(
-    int Id,
     string Title,
     string Description,
     string Summary,
@@ -11,5 +10,5 @@ public record ProjectRequest(
     IFormFile? VideoFile,
     List<IFormFile>? SubImages,
     List<int> Technologies,
-    List<int> Freelancer
+    List<string> Freelancer
 );

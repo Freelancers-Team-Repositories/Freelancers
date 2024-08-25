@@ -1,5 +1,4 @@
 ﻿using Freelancers.Core.Contracts.Users;
-using Freelancers.Core.Entities;
 
 namespace Freelancers.Core.Contracts.Projects;
 public record ProjectResponse(
@@ -13,9 +12,9 @@ public record ProjectResponse(
     bool IsAvailable,
     DateTime CreatedOn,
     DateTime? LastUpdatedOn,
-    ApplicationUser CreatedBy,
-    ApplicationUser? UpdatedBy,
-    List<SubImage>? SubImages,
-    List<Technology> Technologies,
-    List<UserProfileResponse> Freelancer
+    UserProfileResponse CreatedBy,
+    UserProfileResponse? UpdatedBy,
+    List<string>? ImagesUrl,
+    List<string> Technologies,
+    List<UserProfileResponse> Freelancers
 );
