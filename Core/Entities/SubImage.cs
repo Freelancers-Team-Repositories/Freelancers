@@ -5,6 +5,6 @@
         public int Id { get; set; } 
         public string Url { get; set; } = null!;
         public int ProjectId { get; set; }
-        public Project Project { get; set; } = new Project();
+        public Project Project { get; set; } = new();
     }
 }

@@ -10,7 +10,7 @@ public class Project : BaseEntity
     public string? VideoUrl { get; set; }
     public bool IsAvailable { get; set; }
     public bool IsActive { get; set; }
-    public ICollection<SubImage> SubImages { get; set; } = [];
-    public ICollection<ProjectTechnology> ProjectTechnologies { get; set; } = [];
-    public ICollection<FreelancerProject> FreelancerProjects { get; set; } = [];
+    public ICollection<SubImage> SubImages { get; set; } = null!;
+    public ICollection<ProjectTechnology> ProjectTechnologies { get; set; } = null!;
+    public ICollection<FreelancerProject> FreelancerProjects { get; set; } = null!;
 }
