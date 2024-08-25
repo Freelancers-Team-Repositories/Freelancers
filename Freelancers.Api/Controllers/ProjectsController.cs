@@ -1,9 +1,10 @@
 using Freelancers.Api.Extensions;
+using Freelancers.Core.Contracts.Projects;
 using Freelancers.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Freelancers.Api.Controllers;
-
 
 [ApiController]
 [Route("api/[controller]")]
@@ -22,6 +23,16 @@ public class ProjectsController(IProjectService _projectService) : ControllerBas
     public async Task<IActionResult> Get(int id)
     {
         var result = await _projectService.Get(id);
+
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create([FromForm] ProjectRequest projectRequest)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var result = await _projectService.Create(projectRequest, userId!);
 
         return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
     }
