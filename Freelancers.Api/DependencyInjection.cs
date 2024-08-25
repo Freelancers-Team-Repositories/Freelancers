@@ -11,6 +11,7 @@ using Hangfire;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
 
@@ -34,7 +35,8 @@ public static class DependencyInjection
             .AddDefaultCorsConfig()
             .AddFreelancersServices()
             .AddFreelancersOptions(configuration)
-            .AddExceptionHandlerConfig();
+            .AddExceptionHandlerConfig()
+            .AddProjectOptions(configuration);
 
 
         services.AddBackgroundJobsConfig(configuration);
@@ -48,7 +50,31 @@ public static class DependencyInjection
     private static IServiceCollection AddSwaggerConfig(this IServiceCollection services)
     {
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(options =>
+        {
+            options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer token\"",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = JwtBearerDefaults.AuthenticationScheme
+            });
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Id = JwtBearerDefaults.AuthenticationScheme,
+                                Type = ReferenceType.SecurityScheme
+                            }
+                        },
+                        new List<string>()
+                    }
+                });
+        });
 
         return services;
     }
@@ -177,4 +203,10 @@ public static class DependencyInjection
         return services;
     }
 
+    private static IServiceCollection AddProjectOptions(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<Urls>(configuration.GetSection("Urls"));
+
+        return services;
+    }
 }
