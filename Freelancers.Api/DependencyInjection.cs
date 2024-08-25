@@ -1,4 +1,5 @@
 ﻿using FluentValidation.AspNetCore;
+using Freelancers.Core.Contracts.Projects;
 using Freelancers.Core.Entities;
 using Freelancers.Core.Interfaces;
 using Freelancers.Core.Interfaces.UnitOfWork;
@@ -162,6 +163,8 @@ public static class DependencyInjection
         services
             .AddFluentValidationAutoValidation()
             .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+        services.AddScoped<IValidator<ProjectRequest>, ProjectRequestValidator>();
 
         return services;
     }

@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 
 namespace Freelancers.Core.Contracts.Projects;
 public class ProjectRequestValidator : AbstractValidator<ProjectRequest>
@@ -35,19 +34,7 @@ public class ProjectRequestValidator : AbstractValidator<ProjectRequest>
         RuleFor(x => x.ProjectUrl)
             .NotEmpty()
             .WithMessage("ProjectUrl is required")
-            .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _))
-            .When(x => !string.IsNullOrEmpty(x.ProjectUrl));
-
-        RuleFor(x => x.ProjectUrl)
-            .NotEmpty()
-            .WithMessage("ProjectUrl is required")
-            .Must(x => Uri.TryCreate(x, UriKind.Absolute, out Uri uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
-            .WithMessage("ProjectUrl must be a valid absolute URL with http or https scheme");
-
-        RuleFor(x => x.ProjectUrl)
-            .NotEmpty()
-            .WithMessage("ProjectUrl is required")
-            .Must(x => Uri.TryCreate(x, UriKind.Absolute, out _))
+            .Must(BeAValidUrl)
             .WithMessage("ProjectUrl must be a valid URL");
 
         RuleFor(x => x.VideoFile)
