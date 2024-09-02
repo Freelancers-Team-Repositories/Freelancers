@@ -1,5 +1,6 @@
 ﻿using Freelancers.Api.Extensions;
 using Freelancers.Core.Contracts.Users;
+using Freelancers.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Freelancers.Api.Controllers;

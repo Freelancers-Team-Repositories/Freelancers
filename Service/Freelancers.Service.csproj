@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Freelancers.Core.csproj" />
+    <ProjectReference Include="..\Repository\Freelancers.Repository.csproj" />
 	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.7" />
 	<PackageReference Include="MailKit" Version="4.7.1.1" />
 	<PackageReference Include="Hangfire.AspNetCore" Version="1.8.14" />
