@@ -1,6 +1,7 @@
 ﻿using Freelancers.Core.Interfaces.UnitOfWork;
 using Freelancers.Repository.Persistence;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Freelancers.Repository.Implementations;
 
@@ -26,9 +27,13 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
     public async Task AddAsync(T entity)
         => await _context.Set<T>().AddAsync(entity);
 
-    public void DeleteAsync(T entity)
+    public void Delete(T entity)
         => _context.Remove(entity);
 
-    public void UpdateAsync(T entity)
+    public void Update(T entity)
         => _context.Update(entity);
+
+    public async Task<bool> IsExists(Expression<Func<T, bool>> Criteria)
+       => await _context.Set<T>().AnyAsync(Criteria);
+
 }

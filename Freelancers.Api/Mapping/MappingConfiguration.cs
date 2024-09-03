@@ -1,4 +1,5 @@
 ﻿using Freelancers.Core.Contracts.Authentication;
+using Freelancers.Core.Contracts.Tracks;
 using Freelancers.Core.Contracts.Users;
 using Freelancers.Core.Entities;
 
@@ -21,7 +22,8 @@ public class MappingConfiguration : IRegister
 
         config.NewConfig<(ApplicationUser user, IList<string> roles), UserResponse>()
             .Map(des => des, src => src.user)
-            .Map(des => des.Roles, src => src.roles);
+            .Map(des => des.Roles, src => src.roles)
+            .Map(des => des.Tracks, src => src.user.FreelancerTracks.Select(x => new TrackResponse(x.TrackId, x.Track.Name)));
 
 
 

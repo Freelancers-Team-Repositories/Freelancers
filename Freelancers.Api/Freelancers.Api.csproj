@@ -21,6 +21,10 @@
     <ProjectReference Include="..\Service\Freelancers.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validators\Projects\" />
+  </ItemGroup>
+
   
 	
 

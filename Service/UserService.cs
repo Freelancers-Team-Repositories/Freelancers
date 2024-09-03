@@ -1,4 +1,5 @@
-﻿using Freelancers.Core.Contracts.Users;
+﻿using Freelancers.Core.Contracts.Tracks;
+using Freelancers.Core.Contracts.Users;
 using Freelancers.Core.Entities;
 using Freelancers.Core.Interfaces;
 using Freelancers.Core.Interfaces.UnitOfWork;
@@ -10,6 +11,7 @@ using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Services.Common;
 
 namespace Freelancers.Service;
 
@@ -56,6 +58,7 @@ public class UserService(UserManager<ApplicationUser> userManager, IUnitOfWork u
 
 
 
+
     public async Task<Result<IEnumerable<UserResponse>>> GetAllAsync()
     {
         var users = await (from u in _context.Users
@@ -73,6 +76,7 @@ public class UserService(UserManager<ApplicationUser> userManager, IUnitOfWork u
                                u.DateOfBirth,
                                u.IsActive,
                                u.ImageUrl,
+                               Tracks = u.FreelancerTracks.Select(x => new TrackResponse(x.TrackId, x.Track.Name)),
                                Roles = roles.Select(x => x.Name!).ToList()
                            })
                            .GroupBy(user => new { user.Id, user.FirstName, user.LastName, user.Email, user.IsActive, user.DateOfBirth, user.ImageUrl })
@@ -85,17 +89,18 @@ public class UserService(UserManager<ApplicationUser> userManager, IUnitOfWork u
                                user.Key.DateOfBirth,
                                user.Key.IsActive,
                                user.Key.ImageUrl,
+                               user.SelectMany(x => x.Tracks),
                                user.SelectMany(x => x.Roles)
                            ))
                            .ToListAsync();
 
 
-        return Result.Success<IEnumerable<UserResponse>>(users.Adapt<IEnumerable<UserResponse>>());
+        return Result.Success(users.Adapt<IEnumerable<UserResponse>>());
     }
 
     public async Task<Result<UserResponse>> GetAsync(string id)
     {
-        if (await _userManager.FindByIdAsync(id) is not { } user)
+        if (await _userManager.Users.Include(x => x.FreelancerTracks).ThenInclude(x => x.Track).SingleOrDefaultAsync(x => x.Id == id) is not { } user)
             return Result.Failure<UserResponse>(UserErrors.UserNotFound);
 
         var userRoles = await _userManager.GetRolesAsync(user);
@@ -117,11 +122,19 @@ public class UserService(UserManager<ApplicationUser> userManager, IUnitOfWork u
         if (request.Roles.Except(allowedRoles).Any())
             return Result.Failure<UserResponse>(UserErrors.InvalidRoles);
 
+        var allowedTracks = await _unitOfWork.Repository<Track>().GetAllAsync();
+        if (request.Tracks.Except(allowedTracks.Select(x => x.Id)).Any())
+            return Result.Failure<UserResponse>(TrackErrors.InvalidTracks);
+
 
         var user = request.Adapt<ApplicationUser>();
         var result = await _userManager.CreateAsync(user, request.Password);
         if (result.Succeeded)
         {
+            user.FreelancerTracks.AddRange(request.Tracks.Select(trackId => new FreelancerTrack() { TrackId = trackId }));
+
+
+
             await _userManager.AddToRolesAsync(user, request.Roles);
 
             var response = (user, request.Roles).Adapt<UserResponse>();
@@ -147,6 +160,11 @@ public class UserService(UserManager<ApplicationUser> userManager, IUnitOfWork u
             return Result.Failure(UserErrors.InvalidRoles);
 
 
+        var allowedTracks = await _unitOfWork.Repository<Track>().GetAllAsync();
+        if (request.Tracks.Except(allowedTracks.Select(x => x.Id)).Any())
+            return Result.Failure<UserResponse>(TrackErrors.InvalidTracks);
+
+
         if (await _userManager.FindByIdAsync(id) is not { } user)
             return Result.Failure(UserErrors.UserNotFound);
 
@@ -161,7 +179,14 @@ public class UserService(UserManager<ApplicationUser> userManager, IUnitOfWork u
                 .Where(x => x.UserId == id)
                 .ExecuteDeleteAsync();
 
+            await _context.FreelancerTracks
+                .Where(x => x.FreelancerId == id)
+                .ExecuteDeleteAsync();
+
+
+            user.FreelancerTracks.AddRange(request.Tracks.Select(x => new FreelancerTrack() { TrackId = x }));
             await _userManager.AddToRolesAsync(user, request.Roles);
+
 
             return Result.Success();
         }

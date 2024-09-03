@@ -1,4 +1,6 @@
 ﻿
+using System.Linq.Expressions;
+
 namespace Freelancers.Core.Interfaces.UnitOfWork;
 
 public interface IGenericRepository<T> where T : class
@@ -13,6 +15,8 @@ public interface IGenericRepository<T> where T : class
 
 
     Task AddAsync(T entity);
-    void UpdateAsync(T entity);
-    void DeleteAsync(T entity);
+    void Update(T entity);
+    void Delete(T entity);
+
+    Task<bool> IsExists(Expression<Func<T, bool>> Criteria);
 }

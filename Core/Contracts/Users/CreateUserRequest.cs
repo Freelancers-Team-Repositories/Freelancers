@@ -5,5 +5,6 @@ public record CreateUserRequest(
     string Email,
     DateOnly DateOfBirth,
     string Password,
+    IList<int> Tracks,
     IList<string> Roles
 );

@@ -1,12 +1,10 @@
 ﻿using Freelancers.Api.Extensions;
 using Freelancers.Core.Contracts.Users;
-using Freelancers.Shared.Abstraction.Const;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Freelancers.Api.Controllers;
 
 
-[Authorize(Roles = DefaultRoles.Admin)]
+//[Authorize(Roles = DefaultRoles.Admin)]
 [Route("api/[controller]")]
 [ApiController]
 public class UsersController(IUserService _userService) : ControllerBase
@@ -26,7 +24,7 @@ public class UsersController(IUserService _userService) : ControllerBase
     {
         var result = await _userService.GetAsync(id);
 
-        return Ok(result.Value);
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
     }
 
 
@@ -40,7 +38,7 @@ public class UsersController(IUserService _userService) : ControllerBase
 
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(string id, [FromForm] UpdateUserRequest request)
+    public async Task<IActionResult> Update(string id, UpdateUserRequest request)
     {
         var result = await _userService.UpdateAsync(id, request);
 

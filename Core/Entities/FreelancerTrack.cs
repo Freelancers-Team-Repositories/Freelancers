@@ -6,6 +6,6 @@ public class FreelancerTrack
     public int TrackId { get; set; }
 
 
-    public ApplicationUser Freelancer { get; set; } = new();
-    public Track Track { get; set; } = new();
+    public ApplicationUser Freelancer { get; set; } = default!;
+    public Track Track { get; set; } = default!;
 }

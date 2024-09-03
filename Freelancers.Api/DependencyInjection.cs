@@ -1,6 +1,5 @@
 ﻿using FluentValidation.AspNetCore;
 using Freelancers.Core.Entities;
-using Freelancers.Core.Interfaces;
 using Freelancers.Core.Interfaces.UnitOfWork;
 using Freelancers.Repository.Implementations;
 using Freelancers.Repository.Persistence;
@@ -68,6 +67,8 @@ public static class DependencyInjection
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IProjectService, ProjectService>();
+        services.AddScoped<ITrackService, TrackService>();
+
 
         return services;
     }

@@ -1,10 +1,9 @@
-﻿using FluentValidation;
-using Freelancers.Shared.Abstraction.Const;
+﻿using Freelancers.Core.Contracts.Users;
 
-namespace Freelancers.Core.Contracts.Users;
-public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
+namespace Freelancers.Api.Validators.Users;
+public class UpdateUserRequestValidator : AbstractValidator<UpdateUserRequest>
 {
-    public CreateUserRequestValidator()
+    public UpdateUserRequestValidator()
     {
         RuleFor(x => x.FirstName)
             .NotEmpty()
@@ -23,17 +22,14 @@ public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
             .NotEmpty()
             .Must(x => x < DateOnly.FromDateTime(DateTime.Now));
 
-        RuleFor(x => x.Password)
+        RuleFor(x => x.Tracks)
             .NotEmpty()
-            .Matches(RegexPatterns.Password)
-            .WithMessage("Password should be at least 8 digits and should contains Lowercase, NonAlphanumeric and Uppercase");
-
-        RuleFor(x => x.Roles)
-            .NotNull()
-            .NotEmpty();
+            .Must(x => x.Distinct().Count() == x.Count).WithMessage("You cannot duplicated track for the same user")
+            .When(x => x.Tracks is not null);
 
 
         RuleFor(x => x.Roles)
+            .NotEmpty()
             .Must(x => x.Distinct().Count() == x.Count).WithMessage("You cannot duplicated role for the same user")
             .When(x => x.Roles is not null);
     }

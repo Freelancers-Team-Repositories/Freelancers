@@ -4,5 +4,6 @@ public record UpdateUserRequest(
     string LastName,
     string Email,
     DateOnly DateOfBirth,
+    IList<int> Tracks,
     IList<string> Roles
 );
