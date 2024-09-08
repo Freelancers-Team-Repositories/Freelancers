@@ -1,12 +1,12 @@
 ﻿namespace Freelancers.Core.Contracts.tasks;
 
-public record CreateTrackRequest(
-    string Description,
+public record CreateTaskRequest(
 
-bool IsFinished,
-    IList<int> Track,
-    DateTime LastUpdatedOn,
-    IList<int> CreatedBy,
-    IList<int> UpdatedBy)
+    string Description,
+    DateTime CreatedOn,
+    string CreatedById,
+    int TrackId
+)
+   
 ;
 
