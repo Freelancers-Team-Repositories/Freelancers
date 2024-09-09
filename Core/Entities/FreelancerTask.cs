@@ -1,5 +1,5 @@
 ﻿namespace Freelancers.Core.Entities;
-public class FreelancerTask
+public class FreelancerTask :BaseEntity
 {
     public DateTime? StartAt { get; set; }
     public DateTime? EndAt { get; set; }

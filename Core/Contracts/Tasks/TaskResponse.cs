@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace Freelancers.Core.Contracts.Tasks
 {
-    public record TaskRespose
+    public record TaskResponse
    (
 
         int Id,
         string Description,
         bool IsFinished,
         TrackResponse Track,
-        CreatedByResponse CreatedBy,
-        CreatedByResponse? UpdatedBy,
-        DateTime CreatedDate,
-        DateTime UpdatedDate
-        
+        UserBasicInfoResponse CreatedBy,
+        UserBasicInfoResponse? UpdatedBy,
+        DateTime CreatedOn,
+        DateTime LastUpdatedOn
+
      );
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Freelancers.Core.Contracts.Users
 {
-    public record CreatedByResponse
+    public record UserBasicInfoResponse
    (
     string Id,
     string Email,

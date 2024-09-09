@@ -8,7 +8,7 @@ namespace Freelancers.Api.Validators.Tasks
     {
 public CreateTaskRequestValidator()
         {
-            RuleFor(x => x.CreatedOn).NotEmpty().LessThan(DateTime.Now); ;
+            RuleFor(x => x.CreatedOn).NotEmpty().LessThan(DateTime.Now); 
             RuleFor(x => x.Description).NotEmpty();
             RuleFor(x => x.TrackId).NotEmpty();
             RuleFor(x => x.CreatedById).NotEmpty();

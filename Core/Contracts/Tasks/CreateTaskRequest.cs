@@ -1,9 +1,11 @@
-﻿namespace Freelancers.Core.Contracts.tasks;
+﻿using System;
+
+namespace Freelancers.Core.Contracts.tasks;
 
 public record CreateTaskRequest(
 
     string Description,
-    DateTime CreatedOn,
+    DateTime CreatedOn ,
     string CreatedById,
     int TrackId
 )
